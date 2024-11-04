@@ -1,7 +1,8 @@
-import { Admin } from "../models/admin.model.js";
+import { Admin, adminSchema } from "../models/admin.model.js";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndCookies.js";
+import { Course } from "../models/courses.model.js";
+import { adminToken } from "../utils/adminToken.js";
 
 export const adminSignupController = async (req, res) => {
   try{
@@ -50,18 +51,71 @@ export const adminLoginController = async (req, res) => {
       return res.status(400).json({ message: parseData.error });
     }
     const { email, password } = req.body;
-    const user = await Admin.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).json({ message: "Admin not found" });
     }
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    console.log("1")
+    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Incorrect password" });
     }
-    const token = generateTokenAndSetCookie(res , user.email);
+    console.log("2")
+    const token =  adminToken(res , admin.email);
     res.status(200).json({ success: true, message: "Login successful", token });
   }catch(error){
     console.log("Error in login of Admin", error);
     res.status(400).json({ message: "Error in login of Admin" });
   }
+}
+
+export const adminCreateCourseController = async (req , res) => {
+    try {
+        const schemaValidation = z.object({
+            title : z.string().min(6).max(30),
+            description : z.string().min(10).max(100),
+            price : z.number()
+        })
+
+        const parseData = schemaValidation.safeParse(req.body);
+        if(!parseData){
+            return res.status(402).json({
+                success : false,
+                message :parseData.error
+            })
+        }
+
+        const { title , description , price} = req.body;
+        const isCourseAlready =  await Course.findOne({ title })
+
+        if(isCourseAlready){
+            return res.status(402).json({
+                success :false,
+                message : " Course already There!!"
+            })
+        }
+
+        const course = await CourseSchema.create( { 
+            title , 
+            description,
+            price
+        })
+
+        res.status(201).json({
+            success: true,
+            message: 'Course created successfully',
+            course 
+        });
+    } catch (error) {
+        console.log("Error in Creating Course of Admin", error);
+        res.status(400).json({ message: 'Error in Creating Course of Admin' });
+    }
+}
+
+export const adminDeleteCourseController = async (req , res) => {
+    
+}
+
+export const adminUpdateCourseController = async (req , res) => {
+    
 }

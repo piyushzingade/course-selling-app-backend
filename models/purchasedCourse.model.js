@@ -18,4 +18,4 @@ const purchasedCourseSchema = new mongoose.Schema({
 
 });
 
-export const PurchasedCourseSchema = mongoose.model('PurchasedCourseSchema', purchasedCourseSchema);
+export const PurchasedCourse = mongoose.model('PurchasedCourse', purchasedCourseSchema);

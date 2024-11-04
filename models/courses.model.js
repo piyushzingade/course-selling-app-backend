@@ -15,4 +15,4 @@ const courseSchema = new mongoose.Schema({
         required: true,
     },
 });
-export const CourseSchema = mongoose.model('CourseSchema', courseSchema);
+export const Course = mongoose.model('Course', courseSchema);

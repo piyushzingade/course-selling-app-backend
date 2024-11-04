@@ -2,7 +2,7 @@
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js";
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndCookies.js";
+import { userToken } from "../utils/userToken.js";
 
 export const userSignupController = async(req, res) => {
   try{
@@ -59,7 +59,7 @@ export const userLoginController = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Incorrect password" });
     }
-    const token = generateTokenAndSetCookie(res , user.email);
+    const token = userToken(res , user.email);
     res.status(200).json({ success: true, message: "Login successful", token });
   }catch(error){
     console.log("Error in login of User", error);

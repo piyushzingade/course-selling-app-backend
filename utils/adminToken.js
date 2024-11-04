@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
+import { JWT_ADMIN_PASSWORD } from "../config.js";
 
 
-export const generateTokenAndSetCookie = (res, email) => {
-    const jwtSecret = process.env.JWT_SECRET;
-
-    if (!jwtSecret) {
+export const adminToken = (res, email) => {
+    
+    if (!JWT_ADMIN_PASSWORD) {
         throw new Error("JWT_SECRET is not defined in environment variables");
     }
-
-    const token = jwt.sign({ email }, jwtSecret, {
+    console.log("11")
+    const token = jwt.sign({ email },JWT_ADMIN_PASSWORD, {
         expiresIn: "7d",
     });
 

@@ -1,11 +1,13 @@
 import jwt from 'jsonwebtoken'
+import { JWT_USER_PASSWORD } from '../config.js';
+
 export const userAuth = (req, res, next) => {
     const token = req.headers.authorization;
     if (!token) {
         return res.status(401).json({ message: "No token provided" });
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_USER_PASSWORD);
         req.user = decoded;
         next();
     } catch (error) {
