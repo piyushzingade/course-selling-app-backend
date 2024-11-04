@@ -1,10 +1,9 @@
-
+import { Admin } from "../models/admin.model.js";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndCookies.js";
 
-export const userSignupController = async(req, res) => {
+export const adminSignupController = async (req, res) => {
   try{
   const schemaValidation = z.object({
     name: z.string().min(3).max(30),
@@ -17,13 +16,13 @@ export const userSignupController = async(req, res) => {
   }
   const { name, email, password } = req.body;
 
-  const userAlready = await User.findOne({ email });
+  const userAlready = await Admin.findOne({ email });
     if (userAlready) {
         return res.status(400).json({ message: 'User already exists' });
     }
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-  const user = await User.create({ 
+  const admin = await Admin.create({ 
     name, 
     email,
     password: hashedPassword 
@@ -31,17 +30,17 @@ export const userSignupController = async(req, res) => {
   res.status(201).json({
     success: true,
     message: 'User created successfully',
-    user 
+    admin 
   });
   }catch(error){
-    console.log("Error in signup", error);
-    res.status(400).json({ message: 'Error in signup of User' });
+    console.log("Error in signup of Admin", error);
+    res.status(400).json({ message: 'Error in signup' });
   }
 
 }
 
-export const userLoginController = async (req, res) => {
-  try{
+export const adminLoginController = async (req, res) => {
+    try{
     const schemaValidation = z.object({
       email: z.string().email(),
       password: z.string().min(6).max(30),
@@ -51,7 +50,7 @@ export const userLoginController = async (req, res) => {
       return res.status(400).json({ message: parseData.error });
     }
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await Admin.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -62,15 +61,7 @@ export const userLoginController = async (req, res) => {
     const token = generateTokenAndSetCookie(res , user.email);
     res.status(200).json({ success: true, message: "Login successful", token });
   }catch(error){
-    console.log("Error in login of User", error);
-    res.status(400).json({ message: "Error in login of User" });
+    console.log("Error in login of Admin", error);
+    res.status(400).json({ message: "Error in login of Admin" });
   }
 }
-
-
-export const userBuyACourse = async (req, res) => {
-  
-}
-
-export const userGetAllCourses = async (req, res) => {}
-export const userMyCourses = async (req, res) => {}
