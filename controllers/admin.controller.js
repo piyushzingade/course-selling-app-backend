@@ -95,7 +95,7 @@ export const adminCreateCourseController = async (req , res) => {
             })
         }
 
-        const course = await CourseSchema.create( { 
+        const course = await Course.create( { 
             title , 
             description,
             price
