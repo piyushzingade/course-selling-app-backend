@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { JWT_ADMIN_PASSWORD } from "../config.js";
+import { Response } from "express";
 
-
-export const adminToken = (res, email) => {
+export const adminToken = (res : Response, email : any) => {
     
     if (!JWT_ADMIN_PASSWORD) {
         throw new Error("JWT_SECRET is not defined in environment variables");

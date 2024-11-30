@@ -1,7 +1,6 @@
 import express from "express";
-import { z } from "zod";
 import {  userBuyACourse, userGetAllCourses, userLoginController,  userMyCourses,  userSignupController } from "../controllers/user.controller.js";
-import { userAuth } from "../middlewares/user.middlewares.js";
+import { userAuth } from "../middlewares/user.middlewares";
 
 export const userRoute = express();
 
