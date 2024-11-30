@@ -1,4 +1,4 @@
-import { Admin, adminSchema } from "../models/admin.model.js";
+import { Admin } from "../models/admin.model.js";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { Course } from "../models/courses.model.js";
@@ -113,9 +113,33 @@ export const adminCreateCourseController = async (req , res) => {
 }
 
 export const adminDeleteCourseController = async (req , res) => {
-    
+    try{
+     const { title } = req.body;
+     const course = await Course.deleteOne( { title }) 
+     if(!course){
+      res.status(400).json({
+        success:true,
+        message:"Course not found"
+      })
+     }
+     res.status(200).json({
+      success :true, 
+      message : "COurse deleted successfully",
+      course
+     })
+    }catch(error){
+      console.log("Error in COurse deletion route" + error);
+      res.status(401),json({
+        success:false,
+        message:"Error in Deletion route"
+      })
+    }
 }
 
 export const adminUpdateCourseController = async (req , res) => {
-    
+    try {
+      
+    } catch (error) {
+      
+    }
 }
