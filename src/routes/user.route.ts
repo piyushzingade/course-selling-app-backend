@@ -1,5 +1,5 @@
 import express from "express";
-import {  userBuyACourse, userGetAllCourses, userLoginController,  userMyCourses,  userSignupController } from "../controllers/user.controller.js";
+import {  userBuyACourse, userGetAllCourses, userLoginController,  userMyCourses,  userSignupController } from 
 import { userAuth } from "../middlewares/user.middlewares";
 
 export const userRoute = express();
